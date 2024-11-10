@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/post-tracker
+    username: developer
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
