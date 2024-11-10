@@ -21,37 +21,37 @@ import shamshaev.code.service.PostOfficeService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/post_offices")
 public class PostOfficeController {
     private final PostOfficeService postOfficeService;
 
-    @GetMapping("/post_offices")
+    @GetMapping
     public Page<PostOfficeDTO> index(@RequestParam(defaultValue = "1") int page,
                                      @RequestParam(defaultValue = "10") int size) {
 
         return postOfficeService.getAll(page, size);
     }
 
-    @GetMapping("/post_offices/{id}")
+    @GetMapping("/{id}")
     public PostOfficeDTO show(@PathVariable Long id) {
 
         return postOfficeService.findById(id);
     }
 
-    @PostMapping("/post_offices")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PostOfficeDTO create(@RequestBody @Valid PostOfficeCreateDTO postOfficeData) {
 
         return postOfficeService.create(postOfficeData);
     }
 
-    @PutMapping("/post_offices/{id}")
+    @PutMapping("/{id}")
     public PostOfficeDTO update(@RequestBody @Valid PostOfficeUpdateDTO postOfficeData, @PathVariable Long id) {
 
         return postOfficeService.update(postOfficeData, id);
     }
 
-    @DeleteMapping("/post_offices/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long id) {
 
