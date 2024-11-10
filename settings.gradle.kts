@@ -1,1 +1,1 @@
-rootProject.name = "postal-tracker"
+rootProject.name = "post-tracker"
