@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface PostOfficeRepository extends JpaRepository<PostOffice, Long> {
-    Optional<PostOffice> findByPostCode(String name);
+    Optional<PostOffice> findByPostCode(String postCode);
 }
