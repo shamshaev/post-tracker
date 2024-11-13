@@ -3,6 +3,8 @@ package shamshaev.code.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class PostalItemDTO {
@@ -18,6 +20,8 @@ public class PostalItemDTO {
     private String recipientAddress;
 
     private String recipientName;
+
+    private List<String> statuses;
 
     private String updatedAt;
 
