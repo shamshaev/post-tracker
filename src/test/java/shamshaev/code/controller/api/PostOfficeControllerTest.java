@@ -1,8 +1,8 @@
 package shamshaev.code.controller.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.instancio.Instancio;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.jackson.nullable.JsonNullable;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,7 +23,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import shamshaev.code.dto.PostOfficeUpdateDTO;
 import shamshaev.code.exception.ResourceNotFoundException;
-import shamshaev.code.mapper.PostOfficeMapper;
 import shamshaev.code.model.PostOffice;
 import shamshaev.code.repository.PostOfficeRepository;
 import shamshaev.code.util.ModelGenerator;
@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
-@Transactional
+@ActiveProfiles("test")
 class PostOfficeControllerTest {
     @Autowired
     private WebApplicationContext wac;
@@ -52,9 +52,6 @@ class PostOfficeControllerTest {
 
     @Autowired
     private PostOfficeRepository postOfficeRepository;
-
-    @Autowired
-    private PostOfficeMapper postOfficeMapper;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -86,6 +83,11 @@ class PostOfficeControllerTest {
         testPostOffice = Instancio.of(modelGenerator.getPostOfficeModel())
                 .create();
         postOfficeRepository.save(testPostOffice);
+    }
+
+    @AfterEach
+    public void cleanup() {
+        postOfficeRepository.deleteAll();
     }
 
     @Test
