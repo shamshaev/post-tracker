@@ -25,12 +25,13 @@ dependencies {
 	// Spring
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	// ORM
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	// Database
 	implementation("org.postgresql:postgresql:42.7.3")
-	implementation("jakarta.validation:jakarta.validation-api:3.1.0")
 	// Utils
+	implementation("jakarta.validation:jakarta.validation-api:3.1.0")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
