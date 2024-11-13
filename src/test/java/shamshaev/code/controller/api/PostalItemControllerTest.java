@@ -1,8 +1,8 @@
 package shamshaev.code.controller.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.instancio.Instancio;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openapitools.jackson.nullable.JsonNullable;
@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,11 +24,11 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import shamshaev.code.dto.PostalItemUpdateDTO;
 import shamshaev.code.exception.ResourceNotFoundException;
-import shamshaev.code.mapper.PostalItemMapper;
 import shamshaev.code.model.PostalItem;
+import shamshaev.code.repository.PostOfficeRepository;
 import shamshaev.code.repository.PostalItemRepository;
+import shamshaev.code.repository.StatusRepository;
 import shamshaev.code.util.ModelGenerator;
-
 import java.nio.charset.StandardCharsets;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
@@ -43,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
-@Transactional
+@ActiveProfiles("test")
 class PostalItemControllerTest {
     @Autowired
     private WebApplicationContext wac;
@@ -55,7 +56,10 @@ class PostalItemControllerTest {
     private PostalItemRepository postalItemRepository;
 
     @Autowired
-    private PostalItemMapper postalItemMapper;
+    private PostOfficeRepository postOfficeRepository;
+
+    @Autowired
+    private StatusRepository statusRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -89,6 +93,13 @@ class PostalItemControllerTest {
         postalItemRepository.save(testPostalItem);
     }
 
+    @AfterEach
+    public void cleanup() {
+        statusRepository.deleteAll();
+        postalItemRepository.deleteAll();
+        postOfficeRepository.deleteAll();
+    }
+
     @Test
     public void testIndex() throws Exception {
         MvcResult result = mockMvc.perform(get("/api/postal_items"))
@@ -103,6 +114,16 @@ class PostalItemControllerTest {
 
     @Test
     public void testShow() throws Exception {
+        var postOffice = Instancio.of(modelGenerator.getPostOfficeModel())
+                .create();
+        postOfficeRepository.save(postOffice);
+
+        var status = Instancio.of(modelGenerator.getStatusModel())
+                .create();
+        status.setPostalItem(testPostalItem);
+        status.setPostOffice(postOffice);
+        statusRepository.save(status);
+
         MvcResult result = mockMvc.perform(get("/api/postal_items/" + testPostalItem.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -112,6 +133,7 @@ class PostalItemControllerTest {
         assertThatJson(response.getContentAsString()).and(
                 v -> v.node("recipientName").isEqualTo(testPostalItem.getRecipientName())
         );
+        assertThat(response.getContentAsString()).contains(status.getPostOffice().getPostCode());
     }
 
     @Test
