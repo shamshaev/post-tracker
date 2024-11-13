@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import shamshaev.code.model.PostOffice;
 import shamshaev.code.model.PostalItem;
 import shamshaev.code.model.PostalItemType;
+import shamshaev.code.model.Status;
+import shamshaev.code.model.StatusType;
 
 import java.util.Random;
 
@@ -19,6 +21,7 @@ import java.util.Random;
 public class ModelGenerator {
     private Model<PostOffice> postOfficeModel;
     private Model<PostalItem> postalItemModel;
+    private Model<Status> statusModel;
 
     @Autowired
     private Faker faker;
@@ -39,11 +42,24 @@ public class ModelGenerator {
                 .supply(Select.field(PostalItem::getRecipientPostCode), () -> faker.address().postcode())
                 .supply(Select.field(PostalItem::getRecipientAddress), () -> faker.address().city())
                 .supply(Select.field(PostalItem::getRecipientName), () -> faker.name().name())
+                .ignore(Select.field(PostalItem::getStatuses))
+                .toModel();
+
+        statusModel = Instancio.of(Status.class)
+                .ignore(Select.field(Status::getId))
+                .supply(Select.field(Status::getType), ModelGenerator::randomStatusType)
+                .ignore(Select.field(Status::getPostalItem))
+                .ignore(Select.field(Status::getPostOffice))
                 .toModel();
     }
 
     private static PostalItemType randomPostalItemType() {
         PostalItemType[] types = PostalItemType.values();
+        return types[new Random().nextInt(types.length)];
+    }
+
+    private static StatusType randomStatusType() {
+        StatusType[] types = StatusType.values();
         return types[new Random().nextInt(types.length)];
     }
 }
