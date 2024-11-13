@@ -21,7 +21,5 @@ public abstract class PostOfficeMapper {
 
     public abstract PostOfficeDTO map(PostOffice model);
 
-    public abstract PostOffice map(PostOfficeDTO dto);
-
     public abstract void update(PostOfficeUpdateDTO dto, @MappingTarget PostOffice model);
 }
