@@ -1,5 +1,6 @@
 package shamshaev.code.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,37 +22,42 @@ import shamshaev.code.service.PostalItemService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/postal_items")
+@RequestMapping("/api")
 public class PostalItemController {
     private final PostalItemService postalItemService;
 
-    @GetMapping
+    @Operation(summary = "Gets all postal items")
+    @GetMapping("/postal_items")
     public Page<PostalItemDTO> index(@RequestParam(defaultValue = "1") int page,
                                      @RequestParam(defaultValue = "10") int size) {
 
         return postalItemService.getAll(page, size);
     }
 
-    @GetMapping("/{id}")
+    @Operation(summary = "Gets specific postal item including all its tracking statuses")
+    @GetMapping("/postal_items/{id}")
     public PostalItemDTO show(@PathVariable Long id) {
 
         return postalItemService.findById(id);
     }
 
-    @PostMapping
+    @Operation(summary = "Creates new postal item")
+    @PostMapping("/postal_items")
     @ResponseStatus(HttpStatus.CREATED)
     public PostalItemDTO create(@RequestBody @Valid PostalItemCreateDTO postalItemData) {
 
         return postalItemService.create(postalItemData);
     }
 
-    @PutMapping("/{id}")
+    @Operation(summary = "Updates specific postal item")
+    @PutMapping("/postal_items/{id}")
     public PostalItemDTO update(@RequestBody @Valid PostalItemUpdateDTO postalItemData, @PathVariable Long id) {
 
         return postalItemService.update(postalItemData, id);
     }
 
-    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletes specific postal item")
+    @DeleteMapping("/postal_items/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long id) {
 

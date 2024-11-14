@@ -1,5 +1,6 @@
 package shamshaev.code.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,37 +22,42 @@ import shamshaev.code.service.PostOfficeService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/post_offices")
+@RequestMapping("/api")
 public class PostOfficeController {
     private final PostOfficeService postOfficeService;
 
-    @GetMapping
+    @Operation(summary = "Gets all post offices")
+    @GetMapping("/post_offices")
     public Page<PostOfficeDTO> index(@RequestParam(defaultValue = "1") int page,
                                      @RequestParam(defaultValue = "10") int size) {
 
         return postOfficeService.getAll(page, size);
     }
 
-    @GetMapping("/{id}")
+    @Operation(summary = "Gets specific post office")
+    @GetMapping("/post_offices/{id}")
     public PostOfficeDTO show(@PathVariable Long id) {
 
         return postOfficeService.findById(id);
     }
 
-    @PostMapping
+    @Operation(summary = "Creates new post office")
+    @PostMapping("/post_offices")
     @ResponseStatus(HttpStatus.CREATED)
     public PostOfficeDTO create(@RequestBody @Valid PostOfficeCreateDTO postOfficeData) {
 
         return postOfficeService.create(postOfficeData);
     }
 
-    @PutMapping("/{id}")
+    @Operation(summary = "Updates specific post office")
+    @PutMapping("/post_offices/{id}")
     public PostOfficeDTO update(@RequestBody @Valid PostOfficeUpdateDTO postOfficeData, @PathVariable Long id) {
 
         return postOfficeService.update(postOfficeData, id);
     }
 
-    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletes specific post office")
+    @DeleteMapping("/post_offices/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long id) {
 

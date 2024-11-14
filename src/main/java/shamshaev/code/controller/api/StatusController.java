@@ -1,5 +1,6 @@
 package shamshaev.code.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,37 +22,42 @@ import shamshaev.code.service.StatusService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/statuses")
+@RequestMapping("/api")
 public class StatusController {
     private final StatusService statusService;
 
-    @GetMapping
+    @Operation(summary = "Gets all tracking statuses for all postal items")
+    @GetMapping("/statuses")
     public Page<StatusDTO> index(@RequestParam(defaultValue = "1") int page,
                                      @RequestParam(defaultValue = "10") int size) {
 
         return statusService.getAll(page, size);
     }
 
-    @GetMapping("/{id}")
+    @Operation(summary = "Gets specific tracking status")
+    @GetMapping("/statuses/{id}")
     public StatusDTO show(@PathVariable Long id) {
 
         return statusService.findById(id);
     }
 
-    @PostMapping
+    @Operation(summary = "Creates new tracking status for each step of specific postal item delivery")
+    @PostMapping("/statuses")
     @ResponseStatus(HttpStatus.CREATED)
     public StatusDTO create(@RequestBody @Valid StatusCreateDTO statusData) {
 
         return statusService.create(statusData);
     }
 
-    @PutMapping("/{id}")
+    @Operation(summary = "Updates specific tracking status")
+    @PutMapping("/statuses/{id}")
     public StatusDTO update(@RequestBody @Valid StatusUpdateDTO statusData, @PathVariable Long id) {
 
         return statusService.update(statusData, id);
     }
 
-    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletes specific tracking status")
+    @DeleteMapping("/statuses/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long id) {
 
