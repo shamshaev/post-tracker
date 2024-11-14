@@ -22,7 +22,7 @@ import shamshaev.code.service.PostOfficeService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1.0")
 public class PostOfficeController {
     private final PostOfficeService postOfficeService;
 

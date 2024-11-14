@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @OpenAPIDefinition(info =
     @Info(
-            title = "Post Tracker API"
+            title = "Post Tracker API",
+            version = "1.0"
     )
 )
 @SpringBootApplication

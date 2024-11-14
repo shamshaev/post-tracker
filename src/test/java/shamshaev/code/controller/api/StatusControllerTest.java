@@ -114,7 +114,7 @@ class StatusControllerTest {
 
     @Test
     public void testIndex() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/statuses"))
+        MvcResult result = mockMvc.perform(get("/api/v1.0/statuses"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -126,7 +126,7 @@ class StatusControllerTest {
 
     @Test
     public void testShow() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/statuses/" + testStatus.getId()))
+        MvcResult result = mockMvc.perform(get("/api/v1.0/statuses/" + testStatus.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -145,7 +145,7 @@ class StatusControllerTest {
         testStatus.setPostalItem(postalItem);
         var dto = statusMapper.map(testStatus);
 
-        RequestBuilder request = post("/api/statuses")
+        RequestBuilder request = post("/api/v1.0/statuses")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto));
 
@@ -169,7 +169,7 @@ class StatusControllerTest {
         postalItemRepository.save(postalItem);
         dto.setPostalId(JsonNullable.of(postalItem.getPostalId()));
 
-        RequestBuilder request = put("/api/statuses/" + testStatus.getId())
+        RequestBuilder request = put("/api/v1.0/statuses/" + testStatus.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto));
 
@@ -187,7 +187,7 @@ class StatusControllerTest {
 
     @Test
     public void testDestroy() throws Exception {
-        mockMvc.perform(delete("/api/statuses/" + testStatus.getId()))
+        mockMvc.perform(delete("/api/v1.0/statuses/" + testStatus.getId()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 

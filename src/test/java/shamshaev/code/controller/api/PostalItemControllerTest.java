@@ -102,7 +102,7 @@ class PostalItemControllerTest {
 
     @Test
     public void testIndex() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/postal_items"))
+        MvcResult result = mockMvc.perform(get("/api/v1.0/postal_items"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -124,7 +124,7 @@ class PostalItemControllerTest {
         status.setPostOffice(postOffice);
         statusRepository.save(status);
 
-        MvcResult result = mockMvc.perform(get("/api/postal_items/" + testPostalItem.getId()))
+        MvcResult result = mockMvc.perform(get("/api/v1.0/postal_items/" + testPostalItem.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -141,7 +141,7 @@ class PostalItemControllerTest {
         var data = Instancio.of(modelGenerator.getPostalItemModel())
                 .create();
 
-        RequestBuilder request = post("/api/postal_items")
+        RequestBuilder request = post("/api/v1.0/postal_items")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(data));
 
@@ -161,7 +161,7 @@ class PostalItemControllerTest {
         var dto = new PostalItemUpdateDTO();
         dto.setRecipientName(JsonNullable.of("updated_name"));
 
-        RequestBuilder request = put("/api/postal_items/" + testPostalItem.getId())
+        RequestBuilder request = put("/api/v1.0/postal_items/" + testPostalItem.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto));
 
@@ -177,7 +177,7 @@ class PostalItemControllerTest {
 
     @Test
     public void testDestroy() throws Exception {
-        mockMvc.perform(delete("/api/postal_items/" + testPostalItem.getId()))
+        mockMvc.perform(delete("/api/v1.0/postal_items/" + testPostalItem.getId()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 

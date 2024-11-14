@@ -22,7 +22,7 @@ import shamshaev.code.service.StatusService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1.0")
 public class StatusController {
     private final StatusService statusService;
 

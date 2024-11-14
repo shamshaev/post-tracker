@@ -22,7 +22,7 @@ import shamshaev.code.service.PostalItemService;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1.0")
 public class PostalItemController {
     private final PostalItemService postalItemService;
 

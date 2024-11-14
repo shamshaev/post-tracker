@@ -92,7 +92,7 @@ class PostOfficeControllerTest {
 
     @Test
     public void testIndex() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/post_offices"))
+        MvcResult result = mockMvc.perform(get("/api/v1.0/post_offices"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -104,7 +104,7 @@ class PostOfficeControllerTest {
 
     @Test
     public void testShow() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/post_offices/" + testPostOffice.getId()))
+        MvcResult result = mockMvc.perform(get("/api/v1.0/post_offices/" + testPostOffice.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -120,7 +120,7 @@ class PostOfficeControllerTest {
         var data = Instancio.of(modelGenerator.getPostOfficeModel())
                 .create();
 
-        RequestBuilder request = post("/api/post_offices")
+        RequestBuilder request = post("/api/v1.0/post_offices")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(data));
 
@@ -140,7 +140,7 @@ class PostOfficeControllerTest {
         var dto = new PostOfficeUpdateDTO();
         dto.setName(JsonNullable.of("updated_name"));
 
-        RequestBuilder request = put("/api/post_offices/" + testPostOffice.getId())
+        RequestBuilder request = put("/api/v1.0/post_offices/" + testPostOffice.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto));
 
@@ -156,7 +156,7 @@ class PostOfficeControllerTest {
 
     @Test
     public void testDestroy() throws Exception {
-        mockMvc.perform(delete("/api/post_offices/" + testPostOffice.getId()))
+        mockMvc.perform(delete("/api/v1.0/post_offices/" + testPostOffice.getId()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
