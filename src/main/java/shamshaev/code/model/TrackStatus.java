@@ -18,18 +18,18 @@ import java.time.LocalDateTime;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "statuses")
+@Table(name = "track_statuses")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class Status implements BaseEntity {
+public class TrackStatus implements BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @NotNull
     @Enumerated
-    private StatusType type;
+    private TrackStatusType type;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private PostalItem postalItem;

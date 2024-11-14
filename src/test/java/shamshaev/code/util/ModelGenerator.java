@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import shamshaev.code.model.PostOffice;
 import shamshaev.code.model.PostalItem;
 import shamshaev.code.model.PostalItemType;
-import shamshaev.code.model.Status;
-import shamshaev.code.model.StatusType;
+import shamshaev.code.model.TrackStatus;
+import shamshaev.code.model.TrackStatusType;
 
 import java.util.Random;
 
@@ -21,7 +21,7 @@ import java.util.Random;
 public class ModelGenerator {
     private Model<PostOffice> postOfficeModel;
     private Model<PostalItem> postalItemModel;
-    private Model<Status> statusModel;
+    private Model<TrackStatus> statusModel;
 
     @Autowired
     private Faker faker;
@@ -45,11 +45,11 @@ public class ModelGenerator {
                 .ignore(Select.field(PostalItem::getStatuses))
                 .toModel();
 
-        statusModel = Instancio.of(Status.class)
-                .ignore(Select.field(Status::getId))
-                .supply(Select.field(Status::getType), ModelGenerator::randomStatusType)
-                .ignore(Select.field(Status::getPostalItem))
-                .ignore(Select.field(Status::getPostOffice))
+        statusModel = Instancio.of(TrackStatus.class)
+                .ignore(Select.field(TrackStatus::getId))
+                .supply(Select.field(TrackStatus::getType), ModelGenerator::randomStatusType)
+                .ignore(Select.field(TrackStatus::getPostalItem))
+                .ignore(Select.field(TrackStatus::getPostOffice))
                 .toModel();
     }
 
@@ -58,8 +58,8 @@ public class ModelGenerator {
         return types[new Random().nextInt(types.length)];
     }
 
-    private static StatusType randomStatusType() {
-        StatusType[] types = StatusType.values();
+    private static TrackStatusType randomStatusType() {
+        TrackStatusType[] types = TrackStatusType.values();
         return types[new Random().nextInt(types.length)];
     }
 }

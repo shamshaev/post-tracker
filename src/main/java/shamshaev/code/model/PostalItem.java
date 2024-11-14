@@ -52,7 +52,7 @@ public class PostalItem implements BaseEntity {
     private String recipientName;
 
     @OneToMany(mappedBy = "postalItem")
-    private List<Status> statuses = new ArrayList<>();
+    private List<TrackStatus> statuses = new ArrayList<>();
 
     @LastModifiedDate
     private LocalDateTime updatedAt;

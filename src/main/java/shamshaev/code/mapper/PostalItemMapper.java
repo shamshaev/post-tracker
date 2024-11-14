@@ -11,7 +11,7 @@ import shamshaev.code.dto.PostalItemDTO;
 import shamshaev.code.dto.PostalItemUpdateDTO;
 import shamshaev.code.dto.PostalItemCreateDTO;
 import shamshaev.code.model.PostalItem;
-import shamshaev.code.model.Status;
+import shamshaev.code.model.TrackStatus;
 
 import java.time.format.DateTimeFormatter;
 import java.util.StringJoiner;
@@ -31,11 +31,11 @@ public abstract class PostalItemMapper {
     public abstract void update(PostalItemUpdateDTO dto, @MappingTarget PostalItem model);
 
     @Named("statusToString")
-    public String statusToString(Status status) {
+    public String statusToString(TrackStatus trackStatus) {
         var joiner = new StringJoiner(", ");
-        joiner.add(status.getType().toString());
-        joiner.add(status.getPostOffice().getPostCode());
-        joiner.add(status.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy в HH:mm")));
+        joiner.add(trackStatus.getType().toString());
+        joiner.add(trackStatus.getPostOffice().getPostCode());
+        joiner.add(trackStatus.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy в HH:mm")));
         return joiner.toString();
     }
 }

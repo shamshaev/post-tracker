@@ -1,6 +1,6 @@
 package shamshaev.code.model;
 
-public enum StatusType {
+public enum TrackStatusType {
     REGISTERED,
     ARRIVED,
     DEPARTED,

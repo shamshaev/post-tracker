@@ -27,7 +27,7 @@ import shamshaev.code.exception.ResourceNotFoundException;
 import shamshaev.code.model.PostalItem;
 import shamshaev.code.repository.PostOfficeRepository;
 import shamshaev.code.repository.PostalItemRepository;
-import shamshaev.code.repository.StatusRepository;
+import shamshaev.code.repository.TrackStatusRepository;
 import shamshaev.code.util.ModelGenerator;
 import java.nio.charset.StandardCharsets;
 
@@ -59,7 +59,7 @@ class PostalItemControllerTest {
     private PostOfficeRepository postOfficeRepository;
 
     @Autowired
-    private StatusRepository statusRepository;
+    private TrackStatusRepository trackStatusRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -95,7 +95,7 @@ class PostalItemControllerTest {
 
     @AfterEach
     public void cleanup() {
-        statusRepository.deleteAll();
+        trackStatusRepository.deleteAll();
         postalItemRepository.deleteAll();
         postOfficeRepository.deleteAll();
     }
@@ -118,11 +118,11 @@ class PostalItemControllerTest {
                 .create();
         postOfficeRepository.save(postOffice);
 
-        var status = Instancio.of(modelGenerator.getStatusModel())
+        var trackStatus = Instancio.of(modelGenerator.getStatusModel())
                 .create();
-        status.setPostalItem(testPostalItem);
-        status.setPostOffice(postOffice);
-        statusRepository.save(status);
+        trackStatus.setPostalItem(testPostalItem);
+        trackStatus.setPostOffice(postOffice);
+        trackStatusRepository.save(trackStatus);
 
         MvcResult result = mockMvc.perform(get("/api/v1.0/postal_items/" + testPostalItem.getId()))
                 .andDo(print())
@@ -133,7 +133,7 @@ class PostalItemControllerTest {
         assertThatJson(response.getContentAsString()).and(
                 v -> v.node("recipientName").isEqualTo(testPostalItem.getRecipientName())
         );
-        assertThat(response.getContentAsString()).contains(status.getPostOffice().getPostCode());
+        assertThat(response.getContentAsString()).contains(trackStatus.getPostOffice().getPostCode());
     }
 
     @Test

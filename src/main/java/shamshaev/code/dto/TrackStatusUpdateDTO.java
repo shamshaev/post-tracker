@@ -7,7 +7,7 @@ import org.openapitools.jackson.nullable.JsonNullable;
 
 @Getter
 @Setter
-public class StatusUpdateDTO {
+public class TrackStatusUpdateDTO {
     @NotBlank
     private JsonNullable<String> type;
 

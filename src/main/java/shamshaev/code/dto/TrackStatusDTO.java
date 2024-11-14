@@ -1,18 +1,19 @@
 package shamshaev.code.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class StatusCreateDTO {
-    @NotBlank
+public class TrackStatusDTO {
+
+    private Long id;
+
     private String type;
 
-    @NotBlank
     private String postalId;
 
-    @NotBlank
     private String postCode;
+
+    private String createdAt;
 }

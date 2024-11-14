@@ -22,12 +22,12 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import shamshaev.code.dto.StatusUpdateDTO;
-import shamshaev.code.mapper.StatusMapper;
-import shamshaev.code.model.Status;
+import shamshaev.code.dto.TrackStatusUpdateDTO;
+import shamshaev.code.mapper.TrackStatusMapper;
+import shamshaev.code.model.TrackStatus;
 import shamshaev.code.repository.PostOfficeRepository;
 import shamshaev.code.repository.PostalItemRepository;
-import shamshaev.code.repository.StatusRepository;
+import shamshaev.code.repository.TrackStatusRepository;
 import shamshaev.code.util.ModelGenerator;
 import java.nio.charset.StandardCharsets;
 
@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Testcontainers
 @ActiveProfiles("test")
-class StatusControllerTest {
+class TrackStatusControllerTest {
     @Autowired
     private WebApplicationContext wac;
 
@@ -52,7 +52,7 @@ class StatusControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private StatusRepository statusRepository;
+    private TrackStatusRepository statusRepository;
 
     @Autowired
     private PostalItemRepository postalItemRepository;
@@ -61,7 +61,7 @@ class StatusControllerTest {
     private PostOfficeRepository postOfficeRepository;
 
     @Autowired
-    private StatusMapper statusMapper;
+    private TrackStatusMapper statusMapper;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -69,7 +69,7 @@ class StatusControllerTest {
     @Autowired
     private ModelGenerator modelGenerator;
 
-    private Status testStatus;
+    private TrackStatus testTrackStatus;
 
     @Container
     private static PostgreSQLContainer<?> database = new PostgreSQLContainer<>("postgres")
@@ -98,11 +98,11 @@ class StatusControllerTest {
                 .create();
         postOfficeRepository.save(postOffice);
 
-        testStatus = Instancio.of(modelGenerator.getStatusModel())
+        testTrackStatus = Instancio.of(modelGenerator.getStatusModel())
                 .create();
-        testStatus.setPostalItem(postalItem);
-        testStatus.setPostOffice(postOffice);
-        statusRepository.save(testStatus);
+        testTrackStatus.setPostalItem(postalItem);
+        testTrackStatus.setPostOffice(postOffice);
+        statusRepository.save(testTrackStatus);
     }
 
     @AfterEach
@@ -126,14 +126,14 @@ class StatusControllerTest {
 
     @Test
     public void testShow() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/v1.0/statuses/" + testStatus.getId()))
+        MvcResult result = mockMvc.perform(get("/api/v1.0/statuses/" + testTrackStatus.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         MockHttpServletResponse response = result.getResponse();
         assertThatJson(response.getContentAsString()).and(
-                v -> v.node("postalId").asString().isEqualTo(testStatus.getPostalItem().getPostalId())
+                v -> v.node("postalId").asString().isEqualTo(testTrackStatus.getPostalItem().getPostalId())
         );
     }
 
@@ -142,8 +142,8 @@ class StatusControllerTest {
         var postalItem = Instancio.of(modelGenerator.getPostalItemModel())
                 .create();
         postalItemRepository.save(postalItem);
-        testStatus.setPostalItem(postalItem);
-        var dto = statusMapper.map(testStatus);
+        testTrackStatus.setPostalItem(postalItem);
+        var dto = statusMapper.map(testTrackStatus);
 
         RequestBuilder request = post("/api/v1.0/statuses")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -157,19 +157,19 @@ class StatusControllerTest {
         MockHttpServletResponse response = result.getResponse();
         assertThatJson(response.getContentAsString()).and(
                 v -> v.node("id").isNotNull(),
-                v -> v.node("postalId").asString().isEqualTo(testStatus.getPostalItem().getPostalId())
+                v -> v.node("postalId").asString().isEqualTo(testTrackStatus.getPostalItem().getPostalId())
         );
     }
 
     @Test
     public void testUpdate() throws Exception {
-        var dto = new StatusUpdateDTO();
+        var dto = new TrackStatusUpdateDTO();
         var postalItem = Instancio.of(modelGenerator.getPostalItemModel())
                 .create();
         postalItemRepository.save(postalItem);
         dto.setPostalId(JsonNullable.of(postalItem.getPostalId()));
 
-        RequestBuilder request = put("/api/v1.0/statuses/" + testStatus.getId())
+        RequestBuilder request = put("/api/v1.0/statuses/" + testTrackStatus.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto));
 
@@ -180,17 +180,17 @@ class StatusControllerTest {
 
         MockHttpServletResponse response = result.getResponse();
         assertThatJson(response.getContentAsString()).and(
-                v -> v.node("id").isEqualTo(testStatus.getId()),
+                v -> v.node("id").isEqualTo(testTrackStatus.getId()),
                 v -> v.node("postalId").asString().isEqualTo(dto.getPostalId().get())
         );
     }
 
     @Test
     public void testDestroy() throws Exception {
-        mockMvc.perform(delete("/api/v1.0/statuses/" + testStatus.getId()))
+        mockMvc.perform(delete("/api/v1.0/statuses/" + testTrackStatus.getId()))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        assertThat(statusRepository.existsById(testStatus.getId())).isEqualTo(false);
+        assertThat(statusRepository.existsById(testTrackStatus.getId())).isEqualTo(false);
     }
 }
