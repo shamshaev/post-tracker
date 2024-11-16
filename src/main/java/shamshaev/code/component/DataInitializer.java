@@ -7,7 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import shamshaev.code.exception.ResourceNotFoundException;
 import shamshaev.code.model.PostOffice;
@@ -31,6 +31,7 @@ public class DataInitializer implements ApplicationRunner {
     private final PostOfficeRepository postOfficeRepository;
     private final PostalItemRepository postalItemRepository;
     private final TrackStatusRepository trackStatusRepository;
+    private ResourceLoader resourceLoader;
 
 
     public void run(ApplicationArguments args) {
@@ -100,7 +101,7 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     void insertFromCSV(String file, Consumer<CSVRecord> action) {
-        try (Reader in = new FileReader(new ClassPathResource("db.initial/" + file).getFile())) {
+        try (Reader in = new FileReader(resourceLoader.getResource("classpath:db.initial/" + file).getFile())) {
             CSVFormat.DEFAULT.builder()
                     .setHeader().setIgnoreHeaderCase(true)
                     .setAllowMissingColumnNames(true)
