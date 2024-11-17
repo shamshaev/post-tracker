@@ -6,7 +6,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import shamshaev.code.exception.ResourceNotFoundException;
@@ -22,7 +21,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.function.Consumer;
 
-@Profile("!test")
 @Slf4j
 @Component
 @AllArgsConstructor

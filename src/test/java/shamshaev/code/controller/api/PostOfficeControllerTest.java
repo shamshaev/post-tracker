@@ -9,8 +9,8 @@ import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import shamshaev.code.component.DataInitializer;
 import shamshaev.code.dto.PostOfficeUpdateDTO;
 import shamshaev.code.exception.ResourceNotFoundException;
 import shamshaev.code.model.PostOffice;
@@ -42,7 +43,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
-@ActiveProfiles("test")
 class PostOfficeControllerTest {
     @Autowired
     private WebApplicationContext wac;
@@ -58,6 +58,9 @@ class PostOfficeControllerTest {
 
     @Autowired
     private ModelGenerator modelGenerator;
+
+    @MockBean
+    private DataInitializer dataInitializer;
 
     private PostOffice testPostOffice;
 
