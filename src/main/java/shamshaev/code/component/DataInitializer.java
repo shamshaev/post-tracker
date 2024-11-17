@@ -7,7 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import shamshaev.code.exception.ResourceNotFoundException;
 import shamshaev.code.model.PostOffice;
@@ -18,8 +18,7 @@ import shamshaev.code.model.TrackStatusType;
 import shamshaev.code.repository.PostOfficeRepository;
 import shamshaev.code.repository.PostalItemRepository;
 import shamshaev.code.repository.TrackStatusRepository;
-
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.function.Consumer;
 
@@ -31,8 +30,6 @@ public class DataInitializer implements ApplicationRunner {
     private final PostOfficeRepository postOfficeRepository;
     private final PostalItemRepository postalItemRepository;
     private final TrackStatusRepository trackStatusRepository;
-    private ResourceLoader resourceLoader;
-
 
     public void run(ApplicationArguments args) {
         if (postOfficeRepository.findAll().isEmpty()) {
@@ -46,7 +43,7 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    void initializePostOffices() {
+    public void initializePostOffices() {
         Consumer<CSVRecord> savePostOffice = record -> {
             var postOffice = new PostOffice();
 
@@ -64,7 +61,7 @@ public class DataInitializer implements ApplicationRunner {
         insertFromCSV("post_offices.csv", savePostOffice);
     }
 
-    void initializePostalItems() {
+    public void initializePostalItems() {
         Consumer<CSVRecord> savePostalItem = record -> {
             var postalItem = new PostalItem();
 
@@ -80,7 +77,7 @@ public class DataInitializer implements ApplicationRunner {
         insertFromCSV("postal_items.csv", savePostalItem);
     }
 
-    void initializeTrackStatuses() {
+    public void initializeTrackStatuses() {
         Consumer<CSVRecord> saveTrackStatus = record -> {
             var trackStatus = new TrackStatus();
 
@@ -100,8 +97,8 @@ public class DataInitializer implements ApplicationRunner {
         insertFromCSV("track_statuses.csv", saveTrackStatus);
     }
 
-    void insertFromCSV(String file, Consumer<CSVRecord> action) {
-        try (Reader in = new FileReader(resourceLoader.getResource("classpath:db.initial/" + file).getFile())) {
+    private void insertFromCSV(String file, Consumer<CSVRecord> action) {
+        try (Reader in = new InputStreamReader(new ClassPathResource("db.initial/" + file).getInputStream())) {
             CSVFormat.DEFAULT.builder()
                     .setHeader().setIgnoreHeaderCase(true)
                     .setAllowMissingColumnNames(true)
